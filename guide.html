@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NullVPN guide</title>
+<meta name="description" content="How to install NullVPN, connect for the first time, use the free Aether tunnel, choose a tunnel mode, and fix common problems.">
+<meta name="theme-color" content="#0b1210">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/logo-32.png">
+<link rel="apple-touch-icon" href="assets/logo-180.png">
+<link rel="alternate" hreflang="en" href="https://nullvpnapp.github.io/guide.html">
+<link rel="alternate" hreflang="fa" href="https://nullvpnapp.github.io/fa/guide.html">
+<meta property="og:title" content="NullVPN guide">
+<meta property="og:image" content="https://nullvpnapp.github.io/assets/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/style.css?v=2">
+<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<script src="assets/site.js?v=2" defer></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="assets/logo-64.png" alt="" width="32" height="32">NullVPN</a>
+    <nav class="nav" aria-label="Main">
+      <a href="./">Home</a>
+      <a href="download.html">Download</a>
+      <a href="guide.html" aria-current="page">Guide</a>
+      <a href="https://t.me/ZeroNullex" rel="noopener">Telegram</a>
+      <a class="lang" href="fa/guide.html" data-lang-switch lang="fa" hreflang="fa">فارسی</a>
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="Switch theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap guide-layout">
+  <nav class="toc" aria-label="On this page">
+    <strong>On this page</strong>
+    <ol>
+      <li><a href="#install">Install</a></li>
+      <li><a href="#first-connection">Your first connection</a></li>
+      <li><a href="#aether">Aether: the free tunnel</a></li>
+      <li><a href="#modes">Tunnel modes</a></li>
+      <li><a href="#tun-options">TUN options</a></li>
+      <li><a href="#routing">Rules and DNS</a></li>
+      <li><a href="#android">Android extras</a></li>
+      <li><a href="#subscriptions">Subscriptions</a></li>
+      <li><a href="#troubleshooting">Troubleshooting</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ol>
+  </nav>
+
+  <article class="doc">
+    <h1>Guide</h1>
+    <p class="lead">From download to connected in a couple of minutes, and what to do when something doesn't work.</p>
+
+    <h2 id="install">Install</h2>
+
+    <h3 id="install-windows">Windows</h3>
+    <ol class="steps">
+      <li>Download <code>NullVPN-windows-x64-setup.exe</code> from the <a href="download.html#windows">download page</a>.</li>
+      <li>Run it. If SmartScreen says <em>"Windows protected your PC"</em>, click <strong>More info → Run anyway</strong>. The installer isn't code-signed yet; nothing is wrong with it.</li>
+      <li>Allow administrator access when the installer asks.</li>
+      <li>System Proxy mode works straight away. For TUN mode, start NullVPN as administrator (right-click it → <strong>Run as administrator</strong>): it creates a virtual network adapter, and Windows only allows that with administrator rights. The app tells you if it needs this.</li>
+    </ol>
+
+    <h3 id="install-android">Android</h3>
+    <ol class="steps">
+      <li>Download the APK. Almost every phone from the last several years needs <code>arm64-v8a</code>; use <code>armeabi-v7a</code> only on old 32-bit phones and <code>x86_64</code> only for emulators.</li>
+      <li>Open the file. If Android asks, allow your browser or file manager to <strong>install unknown apps</strong>.</li>
+      <li>If Google Play Protect warns that it hasn't scanned the app, tap <strong>Scan</strong>, or <strong>More info → Install</strong>.</li>
+      <li>The first time you connect, Android asks to allow a VPN connection. Tap <strong>OK</strong>.</li>
+    </ol>
+
+    <h3 id="install-linux">Linux</h3>
+    <p>For x86_64 distributions with glibc 2.34 or newer: Debian 12, Ubuntu 22.04, Linux Mint 21, Fedora 35, RHEL 9 and everything since.</p>
+    <p><strong>Debian, Ubuntu, Mint:</strong></p>
+    <pre><code>sudo apt install ./NullVPN-linux-amd64.deb</code></pre>
+    <p><strong>Fedora, RHEL, openSUSE:</strong></p>
+    <pre><code>sudo dnf install ./NullVPN-linux-x86_64.rpm</code></pre>
+    <p>Both add two menu entries: <span class="ui">NullVPN</span> for System Proxy mode, and <span class="ui">NullVPN (TUN)</span>, which starts it with the permission TUN mode needs.</p>
+    <p><strong>AppImage</strong> (any distribution with FUSE, nothing installed):</p>
+    <pre><code>chmod +x NullVPN-linux-x86_64.AppImage
+./NullVPN-linux-x86_64.AppImage</code></pre>
+    <p><strong>Manual (.tar.gz):</strong></p>
+    <pre><code>tar xzf NullVPN-linux-x64.tar.gz
+cd NullVPN-*-x64
+./nullvpn               # run it from here
+sudo ./install.sh       # or install it, with menu entries and `nullvpn` on PATH</code></pre>
+    <p class="muted">System Proxy mode needs no privileges and drives GNOME's proxy setting (GNOME, Cinnamon, Budgie, Unity). On KDE, Xfce or a bare window manager, point apps at <code>127.0.0.1:10809</code> yourself, or use TUN mode. To start TUN mode from a terminal:</p>
+    <pre><code>pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY /opt/nullvpn/nullvpn</code></pre>
+    <p class="muted">Running elevated still uses <em>your</em> servers and settings, not root's.</p>
+
+    <h3 id="install-macos-ios">macOS and iPhone</h3>
+    <p>Coming soon. The <a href="download.html#macos">download page</a> switches them on by itself as soon as a release includes them; the <a href="https://t.me/ZeroNullex" rel="noopener">Telegram channel</a> announces it.</p>
+
+    <h2 id="first-connection">Your first connection</h2>
+    <p>NullVPN is a client: it connects to servers you add. If you have none, use <a href="#aether">Aether</a>, the free tunnel built in.</p>
+    <ol class="steps">
+      <li>Open <span class="ui">Servers</span>.</li>
+      <li>Add your servers: paste a <strong>subscription link</strong>, <strong>scan a QR code</strong>, or <strong>import from the clipboard</strong> (a <code>vless://</code>, <code>vmess://</code>, <code>trojan://</code> or <code>ss://</code> link, or a list of them).</li>
+      <li>Tap <span class="ui">Ping all and pick the fastest</span> to test every server and select the best one.</li>
+      <li>Go back to <span class="ui">Home</span> and tap the big button. The screen shows your new country and IP, the session time, and live speeds.</li>
+    </ol>
+    <p>Subscriptions update in one tap from the <span class="ui">Subscriptions</span> tab in Servers. Servers you add one by one live under <span class="ui">Local</span>.</p>
+
+    <h2 id="aether">Aether: the free tunnel</h2>
+    <p>Aether connects through Cloudflare WARP. No server, account or subscription needed.</p>
+    <ol class="steps">
+      <li>In <span class="ui">Servers</span>, choose <span class="ui">Add Aether</span>.</li>
+      <li>Leave the defaults and save. The first time, it registers a device with Cloudflare; that takes a few seconds and happens once.</li>
+      <li>Select it and connect. Finding a working Cloudflare address can take up to a minute on a restricted network.</li>
+    </ol>
+    <h3>Options worth knowing</h3>
+    <ul>
+      <li><strong>Protocol:</strong> how it reaches Cloudflare. <span class="ui">MASQUE (QUIC)</span> is the fastest; <span class="ui">MASQUE (TCP)</span> works where UDP is throttled and is the one to try when nothing else connects; <span class="ui">WireGuard</span> is classic WARP. The two-hop options (<span class="ui">WARP-in-WARP</span>, <span class="ui">MASQUE-in-MASQUE</span>) give you an exit address from a different range.</li>
+      <li><strong>Scan:</strong> how hard it searches for a reachable Cloudflare address, from <span class="ui">Turbo</span> (fast) to <span class="ui">Ironclad</span> (most thorough).</li>
+      <li><strong>Tor:</strong> <span class="ui">WARP, then Tor</span> hides your traffic from Cloudflare too. Tor can use obfs4 bridges, built in or your own. Tor needs a carrier that stays up, so use MASQUE under it.</li>
+      <li><strong>Exit location:</strong> by default you come out at Cloudflare. Choose a country, or <span class="ui">Fastest anywhere</span>, to leave through a public relay there instead.</li>
+    </ul>
+
+    <h2 id="modes">Tunnel modes</h2>
+    <p>On desktop, choose in <span class="ui">Settings → Connection → Tunnel mode</span>.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Mode</th><th>What it covers</th><th>Needs</th></tr></thead>
+        <tbody>
+          <tr><td>System Proxy</td><td>Browsers and apps that follow the system proxy setting</td><td>Nothing special</td></tr>
+          <tr><td>TUN</td><td>Every app on the device, including games and apps that ignore proxies</td><td>Administrator rights</td></tr>
+          <tr><td>Proxy Only</td><td>Only apps you point at the local proxy yourself: SOCKS <code>127.0.0.1:10808</code>, HTTP <code>127.0.0.1:10809</code></td><td>Nothing special</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>On Android, the VPN always carries the whole phone (or the apps you pick, see <a href="#android">Android extras</a>).</p>
+
+    <h2 id="tun-options">TUN options</h2>
+    <p>These appear under <span class="ui">Tunnel mode</span> when TUN is selected. They apply on the next connect.</p>
+    <ul>
+      <li><strong>TUN engine:</strong> <span class="ui">Zeptun</span> (the default) is lighter and faster. <span class="ui">Xray</span> is the core's own packet engine; switch to it if anything misbehaves.</li>
+      <li><strong>MTU:</strong> 1500 suits most networks. If pages start loading and then stall, lower it, e.g. to <code>1400</code>.</li>
+      <li><strong>IPv6:</strong> sends IPv6 traffic through the tunnel too.</li>
+      <li><strong>Strict route:</strong> blocks traffic the tunnel can't carry instead of letting it go around it, so sites never see your real IP. Keep it on.</li>
+    </ul>
+
+    <h2 id="routing">Rules and DNS</h2>
+    <p>The <span class="ui">Rules</span> tab decides what goes through the proxy, what goes direct and what is blocked. Keeping local sites direct makes them faster and avoids breaking services that don't expect a foreign IP.</p>
+    <p><span class="ui">Settings → DNS Settings</span> picks how names are resolved: DoH, DoT, DoQ or plain resolvers, with FakeDNS.</p>
+
+    <h2 id="android">Android extras</h2>
+    <ul>
+      <li><strong>Per-app proxy:</strong> choose which apps go through the VPN, or which ones skip it, in the <span class="ui">Rules</span> tab.</li>
+      <li><strong>Quick Settings tile:</strong> pull down the notification panel, tap <strong>Edit</strong>, and drag <strong>NullVPN</strong> into your toggles. It connects even with the app closed.</li>
+    </ul>
+
+    <h2 id="subscriptions">Subscriptions that limit devices</h2>
+    <p>Some providers refuse to list servers unless the app sends a device ID. This is <strong>off</strong> by default. If you need it, turn on <span class="ui">Settings → Subscriptions → Send device ID to subscriptions</span>, then update the subscription.</p>
+
+    <h2 id="troubleshooting">Troubleshooting</h2>
+    <details>
+      <summary>Connected, but nothing loads</summary>
+      <p>Tap <span class="ui">Ping all and pick the fastest</span>; the server may be down or blocked. If pings are fine, open <span class="ui">Logs</span> and look for red lines. On desktop, try the other tunnel mode.</p>
+    </details>
+    <details>
+      <summary>Pages start loading, then stall</summary>
+      <p>In TUN mode, lower <strong>MTU</strong> to <code>1400</code> (or <code>1280</code>) and reconnect. Links that carry your connection inside another, such as mobile carriers, PPPoE or another VPN, have less room for each packet.</p>
+    </details>
+    <details>
+      <summary>TUN mode won't start on Windows</summary>
+      <p>TUN mode needs administrator rights. Close NullVPN, then right-click it and choose <strong>Run as administrator</strong>. Or use System Proxy mode, which needs none.</p>
+    </details>
+    <details>
+      <summary>TUN mode won't start on Linux</summary>
+      <p>It needs root to create the network interface. Start it from the <span class="ui">NullVPN (TUN)</span> menu entry, or with the <code>pkexec</code> command in <a href="#install-linux">Install → Linux</a>.</p>
+    </details>
+    <details>
+      <summary>Some sites still see my real IP</summary>
+      <p>Use TUN mode with <strong>Strict route</strong> on. In System Proxy mode, apps that ignore the system proxy connect directly.</p>
+    </details>
+    <details>
+      <summary>Reporting a problem</summary>
+      <p>Open <span class="ui">Logs</span>, tap <span class="ui">Copy all</span>, and paste them into <a href="https://github.com/snarefps/NullVPN/issues" rel="noopener">a GitHub issue</a> along with your platform and NullVPN version. Remove any server addresses you'd rather not share.</p>
+    </details>
+
+    <h2 id="faq">FAQ</h2>
+    <details>
+      <summary>Does NullVPN come with servers?</summary>
+      <p>No. You add your own servers or subscriptions. The built-in <a href="#aether">Aether</a> option connects through Cloudflare WARP without any server of your own.</p>
+    </details>
+    <details>
+      <summary>Is it really free?</summary>
+      <p>Yes. No ads, no accounts, no tracking, nothing to buy. It's free to use, though not open source: please share a link to this site rather than the files.</p>
+    </details>
+    <details>
+      <summary>Is the Windows warning dangerous?</summary>
+      <p>No. It appears because the installer isn't code-signed yet, not because anything is wrong with it. You can <a href="download.html#verify">check the file's SHA-256</a> against the release.</p>
+    </details>
+    <details>
+      <summary>Which Android file should I download?</summary>
+      <p><code>arm64-v8a</code> for almost every phone; <code>armeabi-v7a</code> for old 32-bit phones; <code>x86_64</code> for emulators.</p>
+    </details>
+    <details>
+      <summary>What does NullVPN connect to on its own?</summary>
+      <p>Only the servers and subscriptions you add, <code>ip-api.com</code> to show your IP and country, and a public relay list when you pick an exit location in Aether.</p>
+    </details>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-links">
+      <a href="./">Home</a>
+      <a href="download.html">Download</a>
+      <a href="https://github.com/snarefps/NullVPN/releases" rel="noopener">Releases</a>
+      <a href="https://github.com/snarefps/NullVPN/blob/main/LICENSE" rel="noopener">License</a>
+      <a href="https://t.me/ZeroNullex" rel="noopener">Telegram</a>
+    </div>
+    <p>Made with ❤️ by <strong>ZeroNullex</strong></p>
+  </div>
+</footer>
+
+</body>
+</html>

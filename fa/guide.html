@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>راهنمای NullVPN</title>
+<meta name="description" content="نصب NullVPN، اولین اتصال، تانل رایگان Aether، انتخاب حالت تانل و رفع مشکلات رایج.">
+<meta name="theme-color" content="#0b1210">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/logo-32.png">
+<link rel="apple-touch-icon" href="../assets/logo-180.png">
+<link rel="alternate" hreflang="en" href="https://nullvpnapp.github.io/guide.html">
+<link rel="alternate" hreflang="fa" href="https://nullvpnapp.github.io/fa/guide.html">
+<meta property="og:title" content="راهنمای NullVPN">
+<meta property="og:image" content="https://nullvpnapp.github.io/assets/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/style.css?v=2">
+<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<script src="../assets/site.js?v=2" defer></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="../assets/logo-64.png" alt="" width="32" height="32">NullVPN</a>
+    <nav class="nav" aria-label="منو">
+      <a href="./">خانه</a>
+      <a href="download.html">دانلود</a>
+      <a href="guide.html" aria-current="page">راهنما</a>
+      <a href="https://t.me/ZeroNullex" rel="noopener">تلگرام</a>
+      <a class="lang" href="../guide.html" data-lang-switch lang="en" hreflang="en">English</a>
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="تغییر تم">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap guide-layout">
+  <nav class="toc" aria-label="توی این صفحه">
+    <strong>توی این صفحه</strong>
+    <ol>
+      <li><a href="#install">نصب</a></li>
+      <li><a href="#first-connection">اولین اتصال</a></li>
+      <li><a href="#aether">Aether: تانل رایگان</a></li>
+      <li><a href="#modes">حالت‌های تانل</a></li>
+      <li><a href="#tun-options">تنظیمات TUN</a></li>
+      <li><a href="#routing">شرط‌ها و DNS</a></li>
+      <li><a href="#android">امکانات اندروید</a></li>
+      <li><a href="#subscriptions">ساب‌ها</a></li>
+      <li><a href="#troubleshooting">رفع مشکل</a></li>
+      <li><a href="#faq">سوال‌های رایج</a></li>
+    </ol>
+  </nav>
+
+  <article class="doc">
+    <h1>راهنما</h1>
+    <p class="lead">از دانلود تا وصل شدن توی چند دقیقه، و اینکه اگه چیزی کار نکرد چی‌کار کنی.</p>
+
+    <h2 id="install">نصب</h2>
+
+    <h3 id="install-windows">ویندوز</h3>
+    <ol class="steps">
+      <li><code>NullVPN-windows-x64-setup.exe</code> رو از <a href="download.html#windows">صفحه دانلود</a> بگیر.</li>
+      <li>اجراش کن. اگه SmartScreen گفت <em>«Windows protected your PC»</em>، روی <strong>More info</strong> و بعد <strong>Run anyway</strong> بزن. فایل نصب فقط هنوز امضای دیجیتال نداره و مشکلی نداره.</li>
+      <li>وقتی نصب‌کننده دسترسی ادمین خواست، اجازه بده.</li>
+      <li>حالت پروکسی سیستم همون اول کار می‌کنه. برای حالت TUN، NullVPN رو با دسترسی ادمین باز کن (راست‌کلیک ← <strong>Run as administrator</strong>)؛ چون یه کارت شبکه مجازی می‌سازه و ویندوز فقط با دسترسی ادمین اجازه‌اش رو میده. اگه لازم باشه خود برنامه بهت میگه.</li>
+    </ol>
+
+    <h3 id="install-android">اندروید</h3>
+    <ol class="steps">
+      <li>فایل APK رو دانلود کن. تقریباً همه گوشی‌های چند سال اخیر <code>arm64-v8a</code> می‌خوان؛ <code>armeabi-v7a</code> فقط برای گوشی‌های قدیمی ۳۲ بیتیه و <code>x86_64</code> فقط برای شبیه‌سازها.</li>
+      <li>فایل رو باز کن. اگه اندروید پرسید، به مرورگر یا فایل‌منیجرت اجازه <strong>نصب برنامه‌های ناشناس</strong> رو بده.</li>
+      <li>اگه Google Play Protect گفت برنامه رو اسکن نکرده، <strong>Scan</strong> رو بزن، یا <strong>More info</strong> و بعد <strong>Install</strong>.</li>
+      <li>بار اولی که وصل میشی، اندروید اجازه ساختن اتصال VPN رو می‌پرسه. <strong>OK</strong> رو بزن.</li>
+    </ol>
+
+    <h3 id="install-linux">لینوکس</h3>
+    <p>برای توزیع‌های x86_64 با glibc نسخه ۲.۳۴ به بالا: Debian 12، Ubuntu 22.04، Linux Mint 21، Fedora 35، RHEL 9 و هر چی بعدشون اومده.</p>
+    <p><strong>Debian، Ubuntu، Mint:</strong></p>
+    <pre><code>sudo apt install ./NullVPN-linux-amd64.deb</code></pre>
+    <p><strong>Fedora، RHEL، openSUSE:</strong></p>
+    <pre><code>sudo dnf install ./NullVPN-linux-x86_64.rpm</code></pre>
+    <p>هر دو، دو تا گزینه به منو اضافه می‌کنن: <span class="ui">NullVPN</span> برای حالت پروکسی سیستم، و <span class="ui">NullVPN (TUN)</span> که با دسترسی لازم برای حالت TUN اجراش می‌کنه.</p>
+    <p><strong>AppImage</strong> (هر توزیعی که FUSE داره، بدون نصب):</p>
+    <pre><code>chmod +x NullVPN-linux-x86_64.AppImage
+./NullVPN-linux-x86_64.AppImage</code></pre>
+    <p><strong>نصب دستی (.tar.gz):</strong></p>
+    <pre><code>tar xzf NullVPN-linux-x64.tar.gz
+cd NullVPN-*-x64
+./nullvpn               # run it from here
+sudo ./install.sh       # or install it, with menu entries and `nullvpn` on PATH</code></pre>
+    <p class="muted">حالت پروکسی سیستم دسترسی خاصی نمی‌خواد و تنظیم پروکسی GNOME رو عوض می‌کنه (GNOME، Cinnamon، Budgie، Unity). توی KDE، Xfce یا بدون دسکتاپ، برنامه‌ها رو خودت روی <code>127.0.0.1:10809</code> تنظیم کن، یا از حالت TUN استفاده کن. برای اجرای حالت TUN از ترمینال:</p>
+    <pre><code>pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY /opt/nullvpn/nullvpn</code></pre>
+    <p class="muted">حتی با دسترسی روت هم سرورها و تنظیمات <em>خودت</em> استفاده میشن، نه مال روت.</p>
+
+    <h3 id="install-macos-ios">macOS و آیفون</h3>
+    <p>به‌زودی. <a href="download.html#macos">صفحه دانلود</a> به‌محض اینکه نسخه‌ای با این فایل‌ها منتشر بشه، خودش فعالشون می‌کنه؛ <a href="https://t.me/ZeroNullex" rel="noopener">کانال تلگرام</a> هم خبرش رو میده.</p>
+
+    <h2 id="first-connection">اولین اتصال</h2>
+    <p>NullVPN یه کلاینته و به سرورهایی که خودت اضافه می‌کنی وصل میشه. اگه سروری نداری، از <a href="#aether">Aether</a>، تانل رایگان داخل برنامه، استفاده کن.</p>
+    <ol class="steps">
+      <li>بخش <span class="ui">سرورها</span> رو باز کن.</li>
+      <li>سرورهات رو اضافه کن: <strong>لینک ساب</strong> رو بزن، <strong>کد QR</strong> رو اسکن کن، یا <strong>از کلیپبورد اضافه کن</strong> (یه لینک <code>vless://</code>، <code>vmess://</code>، <code>trojan://</code> یا <code>ss://</code>، یا لیستی از اون‌ها).</li>
+      <li><span class="ui">پینگ گرفتن و انتخاب بهترین</span> رو بزن تا همه سرورها تست بشن و بهترینش انتخاب بشه.</li>
+      <li>برگرد به <span class="ui">خانه</span> و دکمه بزرگ رو بزن. صفحه کشور و آی‌پی جدیدت، زمان سشن و سرعت لحظه‌ای رو نشون میده.</li>
+    </ol>
+    <p>ساب‌ها از تب <span class="ui">اشتراک‌ها</span> توی بخش سرورها با یه ضربه آپدیت میشن. سرورهایی که تکی اضافه می‌کنی توی <span class="ui">محلی</span> هستن.</p>
+
+    <h2 id="aether">Aether: تانل رایگان</h2>
+    <p>Aether از طریق Cloudflare WARP وصل میشه. نه سرور می‌خواد، نه حساب، نه ساب.</p>
+    <ol class="steps">
+      <li>توی <span class="ui">سرورها</span>، <span class="ui">افزودن Aether</span> رو بزن.</li>
+      <li>تنظیمات پیش‌فرض رو نگه دار و ذخیره کن. بار اول یه دستگاه توی Cloudflare ثبت میشه که چند ثانیه طول می‌کشه و فقط یه بار انجام میشه.</li>
+      <li>انتخابش کن و وصل شو. روی شبکه‌های محدود، پیدا کردن یه آدرس سالم Cloudflare ممکنه تا یه دقیقه طول بکشه.</li>
+    </ol>
+    <h3>گزینه‌هایی که خوبه بدونی</h3>
+    <ul>
+      <li><strong>پروتکل:</strong> روش رسیدن به Cloudflare. <span class="ui">MASQUE (QUIC)</span> سریع‌ترینه؛ <span class="ui">MASQUE (TCP)</span> جایی که UDP محدود شده کار می‌کنه و وقتی هیچی وصل نمیشه همینو امتحان کن؛ <span class="ui">WireGuard</span> همون WARP کلاسیکه. گزینه‌های دومرحله‌ای (<span class="ui">WARP-in-WARP</span> و <span class="ui">MASQUE-in-MASQUE</span>) یه آی‌پی خروجی از رنج دیگه بهت میدن.</li>
+      <li><strong>Scan:</strong> اینکه چقدر برای پیدا کردن یه آدرس در دسترس Cloudflare بگرده، از <span class="ui">توربو</span> (سریع) تا <span class="ui">سخت‌گیرانه</span> (کامل‌ترین).</li>
+      <li><strong>Tor:</strong> <span class="ui">اول WARP، بعد Tor</span> ترافیکت رو از Cloudflare هم پنهان می‌کنه. Tor می‌تونه از پل‌های obfs4 استفاده کنه، داخلی یا پل‌های خودت. Tor به حاملی نیاز داره که قطع نشه، پس زیرش از MASQUE استفاده کن.</li>
+      <li><strong>Exit location:</strong> به‌صورت پیش‌فرض از Cloudflare خارج میشی. یه کشور یا <span class="ui">سریع‌ترین، هر جا</span> رو انتخاب کن تا از یه رله عمومی توی اون کشور خارج بشی.</li>
+    </ul>
+
+    <h2 id="modes">حالت‌های تانل</h2>
+    <p>توی دسکتاپ از <span class="ui">تنظیمات ← اتصال ← حالت تانل</span> انتخاب میشه.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>حالت</th><th>چی رو پوشش میده</th><th>چی لازم داره</th></tr></thead>
+        <tbody>
+          <tr><td>پروکسی سیستم</td><td>مرورگرها و برنامه‌هایی که از تنظیم پروکسی سیستم پیروی می‌کنن</td><td>چیز خاصی نه</td></tr>
+          <tr><td>TUN</td><td>همه برنامه‌های دستگاه، حتی بازی‌ها و برنامه‌هایی که پروکسی رو نادیده می‌گیرن</td><td>دسترسی ادمین</td></tr>
+          <tr><td>فقط پروکسی</td><td>فقط برنامه‌هایی که خودت روی پروکسی محلی تنظیم کنی: SOCKS <code>127.0.0.1:10808</code>، HTTP <code>127.0.0.1:10809</code></td><td>چیز خاصی نه</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>توی اندروید، VPN همیشه کل گوشی رو می‌بره (یا برنامه‌هایی که انتخاب می‌کنی، <a href="#android">امکانات اندروید</a> رو ببین).</p>
+
+    <h2 id="tun-options">تنظیمات TUN</h2>
+    <p>وقتی TUN انتخاب شده، این‌ها زیر <span class="ui">حالت تانل</span> میان و از اتصال بعدی اعمال میشن.</p>
+    <ul>
+      <li><strong>موتور TUN:</strong> <span class="ui">Zeptun</span> (پیش‌فرض) سبک‌تر و سریع‌تره. <span class="ui">Xray</span> موتور داخلی خود هسته‌ست؛ اگه مشکلی دیدی برگرد روی اون.</li>
+      <li><strong>MTU:</strong> عدد ۱۵۰۰ برای بیشتر شبکه‌ها خوبه. اگه صفحه‌ها شروع به باز شدن می‌کنن و بعد گیر می‌کنن، کمترش کن، مثلاً <code>1400</code>.</li>
+      <li><strong>IPv6:</strong> ترافیک IPv6 هم از تونل رد بشه.</li>
+      <li><strong>مسیر سخت‌گیرانه:</strong> ترافیکی که تونل نمی‌تونه ببره مسدود میشه، نه اینکه از کنار تونل رد بشه؛ این‌طوری سایت‌ها هیچ‌وقت آی‌پی واقعی‌ات رو نمی‌بینن. روشن نگهش دار.</li>
+    </ul>
+
+    <h2 id="routing">شرط‌ها و DNS</h2>
+    <p>تب <span class="ui">شرط‌ها</span> تعیین می‌کنه چی از پروکسی بره، چی مستقیم و چی مسدود بشه. مستقیم نگه داشتن سایت‌های داخلی هم سرعتشون رو بیشتر می‌کنه و هم سرویس‌هایی که آی‌پی خارجی نمی‌خوان رو خراب نمی‌کنه.</p>
+    <p><span class="ui">تنظیمات ← تنظیمات DNS</span> روش پیدا کردن آدرس‌ها رو تعیین می‌کنه: DoH، DoT، DoQ یا DNS معمولی، همراه FakeDNS.</p>
+
+    <h2 id="android">امکانات اندروید</h2>
+    <ul>
+      <li><strong>پروکسی برای هر برنامه:</strong> توی تب <span class="ui">شرط‌ها</span> انتخاب کن کدوم برنامه‌ها از VPN رد بشن، یا کدوم‌ها ازش رد نشن.</li>
+      <li><strong>دکمه سریع نوار اعلان:</strong> نوار اعلان رو پایین بکش، <strong>Edit</strong> رو بزن و <strong>NullVPN</strong> رو بکش بین دکمه‌هات. حتی وقتی برنامه بسته‌ست وصل میشه.</li>
+    </ul>
+
+    <h2 id="subscriptions">ساب‌هایی که تعداد دستگاه رو محدود می‌کنن</h2>
+    <p>بعضی ارائه‌دهنده‌ها بدون شناسه دستگاه لیست سرورها رو نمیدن. این گزینه به‌صورت پیش‌فرض <strong>خاموشه</strong>. اگه لازمش داری، <span class="ui">تنظیمات ← اشتراک‌ها ← ارسال شناسه دستگاه به اشتراک‌ها</span> رو روشن کن و بعد ساب رو آپدیت کن.</p>
+
+    <h2 id="troubleshooting">رفع مشکل</h2>
+    <details>
+      <summary>وصل شده ولی هیچی باز نمیشه</summary>
+      <p><span class="ui">پینگ گرفتن و انتخاب بهترین</span> رو بزن؛ شاید سرور خاموش یا فیلتر شده باشه. اگه پینگ‌ها خوبن، <span class="ui">گزارش‌ها</span> رو باز کن و خط‌های قرمز رو ببین. توی دسکتاپ، حالت تانل دیگه رو امتحان کن.</p>
+    </details>
+    <details>
+      <summary>صفحه‌ها شروع به باز شدن می‌کنن و بعد گیر می‌کنن</summary>
+      <p>توی حالت TUN، <strong>MTU</strong> رو به <code>1400</code> (یا <code>1280</code>) کم کن و دوباره وصل شو. شبکه‌هایی که اتصالت رو داخل یه اتصال دیگه می‌برن، مثل اینترنت همراه، PPPoE یا یه VPN دیگه، برای هر بسته جای کمتری دارن.</p>
+    </details>
+    <details>
+      <summary>حالت TUN توی ویندوز اجرا نمیشه</summary>
+      <p>حالت TUN دسترسی ادمین لازم داره. NullVPN رو ببند، بعد روش راست‌کلیک کن و <strong>Run as administrator</strong> رو بزن. یا از حالت پروکسی سیستم استفاده کن که دسترسی خاصی نمی‌خواد.</p>
+    </details>
+    <details>
+      <summary>حالت TUN توی لینوکس اجرا نمیشه</summary>
+      <p>برای ساختن کارت شبکه دسترسی روت لازمه. از گزینه <span class="ui">NullVPN (TUN)</span> توی منو اجراش کن، یا با دستور <code>pkexec</code> که توی <a href="#install-linux">نصب ← لینوکس</a> اومده.</p>
+    </details>
+    <details>
+      <summary>بعضی سایت‌ها هنوز آی‌پی واقعی‌ام رو می‌بینن</summary>
+      <p>از حالت TUN با <strong>مسیر سخت‌گیرانه</strong> روشن استفاده کن. توی حالت پروکسی سیستم، برنامه‌هایی که پروکسی سیستم رو نادیده می‌گیرن مستقیم وصل میشن.</p>
+    </details>
+    <details>
+      <summary>گزارش دادن مشکل</summary>
+      <p><span class="ui">گزارش‌ها</span> رو باز کن، <span class="ui">رونوشت همه</span> رو بزن و همراه پلتفرم و نسخه NullVPN توی <a href="https://github.com/snarefps/NullVPN/issues" rel="noopener">یه Issue توی گیت‌هاب</a> بذار. آدرس سرورهایی که نمی‌خوای کسی ببینه رو پاک کن.</p>
+    </details>
+
+    <h2 id="faq">سوال‌های رایج</h2>
+    <details>
+      <summary>NullVPN خودش سرور داره؟</summary>
+      <p>نه. سرور یا ساب رو خودت اضافه می‌کنی. گزینه داخلی <a href="#aether">Aether</a> بدون هیچ سروری، از طریق Cloudflare WARP وصل میشه.</p>
+    </details>
+    <details>
+      <summary>واقعاً رایگانه؟</summary>
+      <p>آره. نه تبلیغ، نه حساب کاربری، نه ردیابی، نه چیزی برای خریدن. استفاده ازش رایگانه ولی متن‌باز نیست؛ لطفاً به جای فایل‌ها لینک همین سایت رو به اشتراک بذار.</p>
+    </details>
+    <details>
+      <summary>هشدار ویندوز خطرناکه؟</summary>
+      <p>نه. این پیام فقط به خاطر اینه که فایل نصب هنوز امضای دیجیتال نداره، نه اینکه مشکلی داشته باشه. می‌تونی <a href="download.html#verify">SHA-256 فایل</a> رو با نسخه منتشرشده مقایسه کنی.</p>
+    </details>
+    <details>
+      <summary>کدوم فایل اندروید رو دانلود کنم؟</summary>
+      <p><code>arm64-v8a</code> برای تقریباً همه گوشی‌ها؛ <code>armeabi-v7a</code> برای گوشی‌های قدیمی ۳۲ بیتی؛ <code>x86_64</code> برای شبیه‌سازها.</p>
+    </details>
+    <details>
+      <summary>NullVPN خودش به کجاها وصل میشه؟</summary>
+      <p>فقط سرورها و ساب‌هایی که خودت اضافه می‌کنی، <code>ip-api.com</code> برای نشون دادن آی‌پی و کشورت، و یه لیست عمومی از رله‌ها وقتی توی Aether مکان خروج انتخاب کنی.</p>
+    </details>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-links">
+      <a href="./">خانه</a>
+      <a href="download.html">دانلود</a>
+      <a href="https://github.com/snarefps/NullVPN/releases" rel="noopener">Releases</a>
+      <a href="https://github.com/snarefps/NullVPN/blob/main/LICENSE" rel="noopener">مجوز</a>
+      <a href="https://t.me/ZeroNullex" rel="noopener">تلگرام</a>
+    </div>
+    <p>ساخته شده با ❤️ توسط <strong>ZeroNullex</strong></p>
+  </div>
+</footer>
+
+</body>
+</html>
