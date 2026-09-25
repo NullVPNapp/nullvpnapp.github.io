@@ -574,6 +574,36 @@ details[open] { padding-bottom: 14px; }
 .cta-band h2 { margin: 0 0 8px; font-size: clamp(1.5rem, 4vw, 2rem); }
 .cta-band p { color: var(--muted); margin: 0 auto 22px; max-width: 560px; }
 
+/* ---------- GitHub star button ---------- */
+
+.hero-star { display: flex; justify-content: center; margin: 14px 0 0; }
+.star-btn {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.95rem;
+  overflow: hidden;
+  transition: border-color .15s, background .15s;
+}
+.star-btn:hover { text-decoration: none; border-color: color-mix(in srgb, var(--warn) 55%, var(--border)); background: var(--surface-2); }
+.star-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.star-main { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; }
+.star-main svg { width: 17px; height: 17px; color: var(--warn); }
+.star-count {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-inline-start: 1px solid var(--border);
+  background: var(--surface-2);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+.star-count[hidden] { display: none; }
+
 .site-footer {
   border-top: 1px solid var(--border);
   padding-block: 32px;

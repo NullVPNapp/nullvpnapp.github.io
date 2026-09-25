@@ -11,6 +11,7 @@
   var REPO = "snarefps/NullVPN";
   var API = "https://api.github.com/repos/" + REPO + "/releases/latest";
   var LATEST = "https://github.com/" + REPO + "/releases/latest/download/";
+  var REPO_API = "https://api.github.com/repos/" + REPO;
   var root = document.documentElement;
   var fa = root.lang === "fa";
 
@@ -238,6 +239,37 @@
     });
   }
 
+  // ---------- stars ----------
+
+  // The star buttons open the repository, where starring needs a GitHub
+  // sign-in; the page itself only shows how many stars there are.
+  function showStars(count) {
+    var text = fa ? count.toLocaleString("fa-IR") : count.toLocaleString("en-US");
+    document.querySelectorAll("[data-stars]").forEach(function (el) {
+      el.textContent = text;
+      el.hidden = false;
+    });
+  }
+
+  function loadStars() {
+    if (!document.querySelector("[data-stars]")) return;
+    var cached = null;
+    try { cached = JSON.parse(sessionStorage.getItem("nullvpn-stars") || "null"); } catch (e) {}
+    if (cached && cached.at > Date.now() - 10 * 60 * 1000) {
+      showStars(cached.count);
+      return;
+    }
+    if (!window.fetch) return;
+    fetch(REPO_API, { headers: { Accept: "application/vnd.github+json" } })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (repo) {
+        if (typeof repo.stargazers_count !== "number") return;
+        try { sessionStorage.setItem("nullvpn-stars", JSON.stringify({ at: Date.now(), count: repo.stargazers_count })); } catch (e) {}
+        showStars(repo.stargazers_count);
+      })
+      .catch(function () { /* the button still works without a count */ });
+  }
+
   // ---------- start ----------
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -261,5 +293,6 @@
     setPrimaryButton();
     markYourPlatform();
     loadRelease();
+    loadStars();
   });
 })();
