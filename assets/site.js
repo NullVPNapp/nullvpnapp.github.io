@@ -26,6 +26,8 @@
         version: "آخرین نسخه",
         released: "منتشر شده در",
         mb: "مگابایت",
+        copy: "کپی دستور",
+        copied: "کپی شد",
         light: "تم روشن",
         dark: "تم تیره",
       }
@@ -40,6 +42,8 @@
         version: "Latest version",
         released: "released",
         mb: "MB",
+        copy: "Copy command",
+        copied: "Copied",
         light: "Light theme",
         dark: "Dark theme",
       };
@@ -177,6 +181,63 @@
       .catch(function () { /* the static links still work */ });
   }
 
+  // ---------- copy buttons ----------
+
+  var ICON_COPY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>';
+  var ICON_DONE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg>';
+
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+    // Plain http, or an older browser: the selection route still works.
+    return new Promise(function (resolve, reject) {
+      var area = document.createElement("textarea");
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.style.position = "fixed";
+      area.style.opacity = "0";
+      document.body.appendChild(area);
+      area.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(area);
+      ok ? resolve() : reject();
+    });
+  }
+
+  // Every command block gets a button that copies it as written.
+  function addCopyButtons() {
+    document.querySelectorAll("pre > code").forEach(function (code) {
+      var pre = code.parentNode;
+      var box = document.createElement("div");
+      box.className = "code-box";
+      pre.parentNode.insertBefore(box, pre);
+      box.appendChild(pre);
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "copy-btn";
+      btn.innerHTML = ICON_COPY;
+      btn.setAttribute("aria-label", T.copy);
+      btn.title = T.copy;
+      var timer = null;
+      btn.addEventListener("click", function () {
+        copyText(code.textContent.replace(/\n+$/, "")).then(function () {
+          btn.innerHTML = ICON_DONE;
+          btn.classList.add("is-done");
+          btn.setAttribute("aria-label", T.copied);
+          btn.title = T.copied;
+          clearTimeout(timer);
+          timer = setTimeout(function () {
+            btn.innerHTML = ICON_COPY;
+            btn.classList.remove("is-done");
+            btn.setAttribute("aria-label", T.copy);
+            btn.title = T.copy;
+          }, 1600);
+        }, function () {});
+      });
+      box.appendChild(btn);
+    });
+  }
+
   // ---------- start ----------
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -196,6 +257,7 @@
         if (location.hash) a.setAttribute("href", a.getAttribute("href").split("#")[0] + location.hash);
       });
     });
+    addCopyButtons();
     setPrimaryButton();
     markYourPlatform();
     loadRelease();
