@@ -15,9 +15,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
-<link rel="stylesheet" href="assets/style.css?v=2">
+<link rel="stylesheet" href="assets/style.css?v=3">
 <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
-<script src="assets/site.js?v=2" defer></script>
+<script src="assets/site.js?v=3" defer></script>
 </head>
 <body>
 
@@ -47,7 +47,8 @@
       <li><a href="#modes">Tunnel modes</a></li>
       <li><a href="#tun-options">TUN options</a></li>
       <li><a href="#routing">Rules and DNS</a></li>
-      <li><a href="#android">Android extras</a></li>
+      <li><a href="#updates">Updates</a></li>
+      <li><a href="#android">Phone extras</a></li>
       <li><a href="#subscriptions">Subscriptions</a></li>
       <li><a href="#troubleshooting">Troubleshooting</a></li>
       <li><a href="#faq">FAQ</a></li>
@@ -95,8 +96,25 @@ sudo ./install.sh       # or install it, with menu entries and `nullvpn` on PATH
     <pre><code>pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY /opt/nullvpn/nullvpn</code></pre>
     <p class="muted">Running elevated still uses <em>your</em> servers and settings, not root's.</p>
 
-    <h3 id="install-macos-ios">macOS and iPhone</h3>
-    <p>Coming soon. The <a href="download.html#macos">download page</a> switches them on by itself as soon as a release includes them; the <a href="https://t.me/ZeroNullex" rel="noopener">Telegram channel</a> announces it.</p>
+    <h3 id="install-macos">macOS</h3>
+    <p>One app for Apple silicon and Intel Macs, macOS 12 or newer.</p>
+    <ol class="steps">
+      <li>Download <code>NullVPN-macos-universal.dmg</code>, open it, and drag <strong>NullVPN</strong> into <strong>Applications</strong>.</li>
+      <li>The app isn't signed by Apple yet, so run this once in Terminal before opening it:
+        <pre><code>xattr -dr com.apple.quarantine /Applications/NullVPN.app</code></pre></li>
+      <li>System Proxy mode works straight away. <strong>TUN mode</strong> asks for your administrator password the first time, to install a small helper; after that, connecting asks for nothing.</li>
+    </ol>
+    <p class="muted">To remove the TUN helper later:</p>
+    <pre><code>sudo /Library/PrivilegedHelperTools/com.nullvpn.helper uninstall</code></pre>
+
+    <h3 id="install-ios">iPhone and iPad</h3>
+    <p>iOS 15 or newer. The <code>.ipa</code> is unsigned, so you sign it yourself.</p>
+    <ol class="steps">
+      <li>Download <code>NullVPN-ios-unsigned.ipa</code>.</li>
+      <li>Sign and install it with <strong>ESign</strong>, Sideloadly or Xcode, using a certificate whose provisioning profile includes the <strong>Network Extension</strong> capability (packet tunnel). Without it the app installs but can't connect.</li>
+      <li>The first time you connect, iOS asks to <strong>add a VPN configuration</strong>. Tap <strong>Allow</strong>.</li>
+    </ol>
+    <p class="muted">Psiphon and Tor bridges aren't available on iOS: both are separate programs, and iOS doesn't let an app run them.</p>
 
     <h2 id="first-connection">Your first connection</h2>
     <p>NullVPN is a client: it connects to servers you add. If you have none, use <a href="#aether">Aether</a>, the free tunnel built in.</p>
@@ -135,7 +153,7 @@ sudo ./install.sh       # or install it, with menu entries and `nullvpn` on PATH
         </tbody>
       </table>
     </div>
-    <p>On Android, the VPN always carries the whole phone (or the apps you pick, see <a href="#android">Android extras</a>).</p>
+    <p>On Android and iPhone, the VPN always carries the whole phone (on Android, or just the apps you pick; see <a href="#android">Phone extras</a>).</p>
 
     <h2 id="tun-options">TUN options</h2>
     <p>These appear under <span class="ui">Tunnel mode</span> when TUN is selected. They apply on the next connect.</p>
@@ -149,11 +167,24 @@ sudo ./install.sh       # or install it, with menu entries and `nullvpn` on PATH
     <h2 id="routing">Rules and DNS</h2>
     <p>The <span class="ui">Rules</span> tab decides what goes through the proxy, what goes direct and what is blocked. Keeping local sites direct makes them faster and avoids breaking services that don't expect a foreign IP.</p>
     <p><span class="ui">Settings → DNS Settings</span> picks how names are resolved: DoH, DoT, DoQ or plain resolvers, with FakeDNS.</p>
+    <p><span class="ui">Settings → Rules → Geo files</span> chooses where the routing databases (<code>geoip.dat</code> and <code>geosite.dat</code>) come from: Chocolate4U, Loyalsoldier, runetfreedom, v2fly or your own addresses. Update them by hand or on a schedule. Every download is checked against its publisher's checksum and against the categories your rules use, and a file that fails never replaces the one that works.</p>
 
-    <h2 id="android">Android extras</h2>
+    <h2 id="updates">Updates</h2>
+    <p>When a new version is out, NullVPN shows an update capsule with the version and the download size. It asks before doing anything, downloads with a progress bar, and checks the file against the release's <code>SHA256SUMS.txt</code> before installing it.</p>
+    <ul>
+      <li><strong>Windows:</strong> NullVPN closes and the normal installer opens.</li>
+      <li><strong>Android:</strong> it picks the APK for your phone's architecture and opens Android's installer. The first time, allow NullVPN to install apps.</li>
+      <li><strong>Linux:</strong> it updates the package you installed: AppImage, <code>.deb</code>, <code>.rpm</code> or the tarball.</li>
+      <li><strong>macOS:</strong> it replaces the app and clears its quarantine flag, so no Terminal command is needed.</li>
+      <li><strong>iPhone:</strong> it opens the release page, since a new <code>.ipa</code> has to be signed again.</li>
+    </ul>
+    <p>Updating keeps your servers, subscriptions and settings.</p>
+
+    <h2 id="android">Phone extras</h2>
     <ul>
       <li><strong>Per-app proxy:</strong> choose which apps go through the VPN, or which ones skip it, in the <span class="ui">Rules</span> tab.</li>
       <li><strong>Quick Settings tile:</strong> pull down the notification panel, tap <strong>Edit</strong>, and drag <strong>NullVPN</strong> into your toggles. It connects even with the app closed.</li>
+      <li><strong>iPhone Control Center</strong> (iOS 18 and later): open Control Center, tap <strong>+</strong>, then <strong>Add a Control</strong>, and choose <strong>NullVPN</strong>. It also works on the Lock Screen and the Action button, and connects with the server you last used. Connect once from the app first.</li>
     </ul>
 
     <h2 id="subscriptions">Subscriptions that limit devices</h2>
@@ -175,6 +206,14 @@ sudo ./install.sh       # or install it, with menu entries and `nullvpn` on PATH
     <details>
       <summary>TUN mode won't start on Linux</summary>
       <p>It needs root to create the network interface. Start it from the <span class="ui">NullVPN (TUN)</span> menu entry, or with the <code>pkexec</code> command in <a href="#install-linux">Install → Linux</a>.</p>
+    </details>
+    <details>
+      <summary>macOS says NullVPN can't be opened or is damaged</summary>
+      <p>The app isn't signed by Apple yet. Run <code>xattr -dr com.apple.quarantine /Applications/NullVPN.app</code> in Terminal once, then open it again.</p>
+    </details>
+    <details>
+      <summary>The iPhone app installs but won't connect</summary>
+      <p>The certificate it was signed with lacks the <strong>Network Extension</strong> capability. Sign it again with a certificate whose provisioning profile includes it.</p>
     </details>
     <details>
       <summary>Some sites still see my real IP</summary>

@@ -3,8 +3,8 @@
 // Every download link in the HTML already points at
 // github.com/…/releases/latest/download/<file>, which GitHub redirects to the
 // newest release on its own. So the page works with this script blocked or
-// the API unreachable; what the API adds is the version, the date, file
-// sizes, and switching on macOS and iOS once a release carries their files.
+// the API unreachable; what the API adds is the version, the date
+// and file sizes.
 (function () {
   "use strict";
 
@@ -20,10 +20,8 @@
         forWindows: "دانلود برای ویندوز",
         forAndroid: "دانلود برای اندروید",
         forLinux: "دانلود برای لینوکس",
-        forMac: "macOS به‌زودی",
-        forIos: "iOS به‌زودی",
-        forMacReady: "دانلود برای macOS",
-        forIosReady: "دانلود برای iPhone",
+        forMac: "دانلود برای مک",
+        forIos: "دانلود برای آیفون",
         allDownloads: "همه دانلودها",
         version: "آخرین نسخه",
         released: "منتشر شده در",
@@ -36,10 +34,8 @@
         forWindows: "Download for Windows",
         forAndroid: "Download for Android",
         forLinux: "Download for Linux",
-        forMac: "macOS — coming soon",
-        forIos: "iOS — coming soon",
-        forMacReady: "Download for macOS",
-        forIosReady: "Download for iPhone",
+        forMac: "Download for macOS",
+        forIos: "Download for iPhone",
         allDownloads: "All downloads",
         version: "Latest version",
         released: "released",
@@ -92,12 +88,6 @@
   };
 
   var you = detectPlatform();
-  var releaseAssets = null; // names in the latest release, once known
-
-  function hasAsset(name) {
-    return releaseAssets ? releaseAssets.indexOf(name) !== -1 : false;
-  }
-
   // The hero's main button: straight to the right file where there is one.
   function setPrimaryButton() {
     var btn = document.getElementById("primary-download");
@@ -109,13 +99,9 @@
     if (you === "windows") { text = T.forWindows; href = LATEST + FILES.windows; }
     else if (you === "android") { text = T.forAndroid; href = LATEST + FILES.android; }
     else if (you === "linux") { text = T.forLinux; href = downloadPage + "#linux"; }
-    else if (you === "macos") {
-      if (hasAsset(FILES.macos)) { text = T.forMacReady; href = LATEST + FILES.macos; }
-      else { text = T.forMac; href = downloadPage + "#macos"; }
-    } else if (you === "ios") {
-      if (hasAsset(FILES.ios)) { text = T.forIosReady; href = downloadPage + "#ios"; }
-      else { text = T.forIos; href = downloadPage + "#ios"; }
-    }
+    else if (you === "macos") { text = T.forMac; href = LATEST + FILES.macos; }
+    // An .ipa has to be signed first; the download page says how.
+    else if (you === "ios") { text = T.forIos; href = downloadPage + "#ios"; }
     if (label) label.textContent = text;
     btn.setAttribute("href", href);
   }
@@ -144,7 +130,6 @@
 
   function applyRelease(release) {
     var assets = release.assets || [];
-    releaseAssets = assets.map(function (a) { return a.name; });
 
     var line = document.getElementById("release-line");
     if (line) {
@@ -165,17 +150,6 @@
       document.querySelectorAll('[data-size="' + a.name + '"]').forEach(function (el) {
         el.textContent = formatSize(a.size);
       });
-    });
-
-    // Platforms marked "coming soon" switch on by themselves once a release
-    // carries their file.
-    document.querySelectorAll("[data-soon]").forEach(function (block) {
-      var name = block.getAttribute("data-soon");
-      var ready = document.querySelector('[data-ready="' + name + '"]');
-      if (hasAsset(name) && ready) {
-        block.hidden = true;
-        ready.hidden = false;
-      }
     });
 
     setPrimaryButton();

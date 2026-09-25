@@ -15,9 +15,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
-<link rel="stylesheet" href="../assets/style.css?v=2">
+<link rel="stylesheet" href="../assets/style.css?v=3">
 <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
-<script src="../assets/site.js?v=2" defer></script>
+<script src="../assets/site.js?v=3" defer></script>
 </head>
 <body>
 
@@ -47,7 +47,8 @@
       <li><a href="#modes">حالت‌های تانل</a></li>
       <li><a href="#tun-options">تنظیمات TUN</a></li>
       <li><a href="#routing">شرط‌ها و DNS</a></li>
-      <li><a href="#android">امکانات اندروید</a></li>
+      <li><a href="#updates">آپدیت</a></li>
+      <li><a href="#android">امکانات گوشی</a></li>
       <li><a href="#subscriptions">ساب‌ها</a></li>
       <li><a href="#troubleshooting">رفع مشکل</a></li>
       <li><a href="#faq">سوال‌های رایج</a></li>
@@ -95,8 +96,25 @@ sudo ./install.sh       # or install it, with menu entries and `nullvpn` on PATH
     <pre><code>pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY /opt/nullvpn/nullvpn</code></pre>
     <p class="muted">حتی با دسترسی روت هم سرورها و تنظیمات <em>خودت</em> استفاده میشن، نه مال روت.</p>
 
-    <h3 id="install-macos-ios">macOS و آیفون</h3>
-    <p>به‌زودی. <a href="download.html#macos">صفحه دانلود</a> به‌محض اینکه نسخه‌ای با این فایل‌ها منتشر بشه، خودش فعالشون می‌کنه؛ <a href="https://t.me/ZeroNullex" rel="noopener">کانال تلگرام</a> هم خبرش رو میده.</p>
+    <h3 id="install-macos">مک</h3>
+    <p>یک برنامه برای مک‌های Apple silicon و اینتل، macOS 12 یا جدیدتر.</p>
+    <ol class="steps">
+      <li><code>NullVPN-macos-universal.dmg</code> رو دانلود کن، بازش کن و <strong>NullVPN</strong> رو بکش توی <strong>Applications</strong>.</li>
+      <li>برنامه هنوز امضای اپل نداره، پس قبل از باز کردنش یک بار این رو توی Terminal بزن:
+        <pre><code>xattr -dr com.apple.quarantine /Applications/NullVPN.app</code></pre></li>
+      <li>حالت پروکسی سیستم همون اول کار می‌کنه. <strong>حالت TUN</strong> بار اول رمز ادمین رو می‌پرسه تا یه هلپر کوچیک نصب کنه؛ بعدش موقع وصل شدن چیزی نمی‌پرسه.</li>
+    </ol>
+    <p class="muted">برای حذف هلپر TUN:</p>
+    <pre><code>sudo /Library/PrivilegedHelperTools/com.nullvpn.helper uninstall</code></pre>
+
+    <h3 id="install-ios">آیفون و آیپد</h3>
+    <p>iOS 15 یا جدیدتر. فایل <code>.ipa</code> امضا نداره و خودت امضاش می‌کنی.</p>
+    <ol class="steps">
+      <li><code>NullVPN-ios-unsigned.ipa</code> رو دانلود کن.</li>
+      <li>با <strong>ESign</strong>، Sideloadly یا Xcode امضا و نصبش کن، با سرتیفیکیتی که پروفایلش قابلیت <strong>Network Extension</strong> (packet tunnel) رو داره. بدون این قابلیت برنامه نصب میشه ولی وصل نمیشه.</li>
+      <li>بار اول که وصل میشی، iOS می‌پرسه <strong>VPN Configuration</strong> اضافه بشه. <strong>Allow</strong> رو بزن.</li>
+    </ol>
+    <p class="muted">Psiphon و پل‌های Tor روی iOS نیستن: هر دو برنامه جداگانه‌ان و iOS اجازه اجراشون رو به برنامه نمیده.</p>
 
     <h2 id="first-connection">اولین اتصال</h2>
     <p>NullVPN یه کلاینته و به سرورهایی که خودت اضافه می‌کنی وصل میشه. اگه سروری نداری، از <a href="#aether">Aether</a>، تانل رایگان داخل برنامه، استفاده کن.</p>
@@ -135,7 +153,7 @@ sudo ./install.sh       # or install it, with menu entries and `nullvpn` on PATH
         </tbody>
       </table>
     </div>
-    <p>توی اندروید، VPN همیشه کل گوشی رو می‌بره (یا برنامه‌هایی که انتخاب می‌کنی، <a href="#android">امکانات اندروید</a> رو ببین).</p>
+    <p>توی اندروید و آیفون، VPN همیشه کل گوشی رو می‌بره (توی اندروید، یا فقط برنامه‌هایی که انتخاب می‌کنی؛ <a href="#android">امکانات گوشی</a> رو ببین).</p>
 
     <h2 id="tun-options">تنظیمات TUN</h2>
     <p>وقتی TUN انتخاب شده، این‌ها زیر <span class="ui">حالت تانل</span> میان و از اتصال بعدی اعمال میشن.</p>
@@ -149,11 +167,24 @@ sudo ./install.sh       # or install it, with menu entries and `nullvpn` on PATH
     <h2 id="routing">شرط‌ها و DNS</h2>
     <p>تب <span class="ui">شرط‌ها</span> تعیین می‌کنه چی از پروکسی بره، چی مستقیم و چی مسدود بشه. مستقیم نگه داشتن سایت‌های داخلی هم سرعتشون رو بیشتر می‌کنه و هم سرویس‌هایی که آی‌پی خارجی نمی‌خوان رو خراب نمی‌کنه.</p>
     <p><span class="ui">تنظیمات ← تنظیمات DNS</span> روش پیدا کردن آدرس‌ها رو تعیین می‌کنه: DoH، DoT، DoQ یا DNS معمولی، همراه FakeDNS.</p>
+    <p><span class="ui">تنظیمات ← Rules ← فایل‌های Geo</span> تعیین می‌کنه دیتابیس‌های مسیریابی (<code>geoip.dat</code> و <code>geosite.dat</code>) از کجا بیان: Chocolate4U، Loyalsoldier، runetfreedom، v2fly یا آدرس‌های خودت. دستی یا زمان‌بندی‌شده آپدیتشون کن. هر دانلود با چک‌سام ناشرش و با دسته‌هایی که شرط‌هات استفاده می‌کنن بررسی میشه، و فایلی که رد بشه هیچ‌وقت جای فایل سالم رو نمی‌گیره.</p>
 
-    <h2 id="android">امکانات اندروید</h2>
+    <h2 id="updates">آپدیت</h2>
+    <p>وقتی نسخه جدید بیاد، NullVPN یه کپسول آپدیت با نسخه و حجم دانلود نشون میده. قبل از هر کاری می‌پرسه، با نوار پیشرفت دانلود می‌کنه و قبل از نصب، فایل رو با <code>SHA256SUMS.txt</code> همون نسخه چک می‌کنه.</p>
+    <ul>
+      <li><strong>ویندوز:</strong> NullVPN بسته میشه و نصب‌کننده معمولی باز میشه.</li>
+      <li><strong>اندروید:</strong> APK مناسب معماری گوشیت رو انتخاب می‌کنه و نصب‌کننده اندروید رو باز می‌کنه. بار اول، اجازه نصب برنامه رو به NullVPN بده.</li>
+      <li><strong>لینوکس:</strong> همون بسته‌ای که نصب کردی رو آپدیت می‌کنه: AppImage، <code>.deb</code>، <code>.rpm</code> یا tarball.</li>
+      <li><strong>مک:</strong> برنامه رو جایگزین می‌کنه و علامت قرنطینه‌اش رو پاک می‌کنه، پس دستور Terminal لازم نیست.</li>
+      <li><strong>آیفون:</strong> صفحه نسخه رو باز می‌کنه، چون <code>.ipa</code> جدید باید دوباره امضا بشه.</li>
+    </ul>
+    <p>با آپدیت، سرورها، ساب‌ها و تنظیماتت سر جاشون می‌مونن.</p>
+
+    <h2 id="android">امکانات گوشی</h2>
     <ul>
       <li><strong>پروکسی برای هر برنامه:</strong> توی تب <span class="ui">شرط‌ها</span> انتخاب کن کدوم برنامه‌ها از VPN رد بشن، یا کدوم‌ها ازش رد نشن.</li>
       <li><strong>دکمه سریع نوار اعلان:</strong> نوار اعلان رو پایین بکش، <strong>Edit</strong> رو بزن و <strong>NullVPN</strong> رو بکش بین دکمه‌هات. حتی وقتی برنامه بسته‌ست وصل میشه.</li>
+      <li><strong>Control Center آیفون</strong> (iOS 18 به بعد): Control Center رو باز کن، <strong>+</strong> رو بزن، بعد <strong>Add a Control</strong> و <strong>NullVPN</strong> رو انتخاب کن. روی صفحه قفل و دکمه Action هم کار می‌کنه و با آخرین سروری که استفاده کردی وصل میشه. اول یک بار از داخل برنامه وصل شو.</li>
     </ul>
 
     <h2 id="subscriptions">ساب‌هایی که تعداد دستگاه رو محدود می‌کنن</h2>
@@ -175,6 +206,14 @@ sudo ./install.sh       # or install it, with menu entries and `nullvpn` on PATH
     <details>
       <summary>حالت TUN توی لینوکس اجرا نمیشه</summary>
       <p>برای ساختن کارت شبکه دسترسی روت لازمه. از گزینه <span class="ui">NullVPN (TUN)</span> توی منو اجراش کن، یا با دستور <code>pkexec</code> که توی <a href="#install-linux">نصب ← لینوکس</a> اومده.</p>
+    </details>
+    <details>
+      <summary>مک میگه NullVPN باز نمیشه یا خرابه</summary>
+      <p>برنامه هنوز امضای اپل نداره. یک بار توی Terminal بزن <code>xattr -dr com.apple.quarantine /Applications/NullVPN.app</code> و دوباره بازش کن.</p>
+    </details>
+    <details>
+      <summary>برنامه آیفون نصب میشه ولی وصل نمیشه</summary>
+      <p>سرتیفیکیتی که باهاش امضا شده قابلیت <strong>Network Extension</strong> رو نداره. با سرتیفیکیتی که پروفایلش این قابلیت رو داره دوباره امضاش کن.</p>
     </details>
     <details>
       <summary>بعضی سایت‌ها هنوز آی‌پی واقعی‌ام رو می‌بینن</summary>
