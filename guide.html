@@ -50,6 +50,10 @@
       <li><a href="#updates">Updates</a></li>
       <li><a href="#android">Phone extras</a></li>
       <li><a href="#subscriptions">Subscriptions</a></li>
+      <li><a href="#locks">Locked links</a></li>
+      <li><a href="#tools">Tools</a></li>
+      <li><a href="#hotspot">Sharing over hotspot</a></li>
+      <li><a href="#provider">The Provider tab</a></li>
       <li><a href="#troubleshooting">Troubleshooting</a></li>
       <li><a href="#faq">FAQ</a></li>
     </ol>
@@ -190,6 +194,31 @@ sudo ./install.sh       # or install it, with menu entries and `nullvpn` on PATH
     <h2 id="subscriptions">Subscriptions that limit devices</h2>
     <p>Some providers refuse to list servers unless the app sends a device ID. This is <strong>off</strong> by default. If you need it, turn on <span class="ui">Settings → Subscriptions → Send device ID to subscriptions</span>, then update the subscription.</p>
 
+    <p>Two switches in <span class="ui">Settings → Connection</span> help when you use subscriptions. <span class="ui">Update subscriptions through the VPN</span> fetches them over the tunnel while you are connected, which helps when the provider's address is blocked on your network; when you are disconnected they update directly. <span class="ui">Switch servers without disconnecting</span> lets you pick another server without dropping the tunnel first. Every subscription also has an <span class="ui">Auto</span> entry that picks the fastest server for you.</p>
+
+    <h2 id="locks">Locked links</h2>
+    <p>If you share servers with other people, you can turn a configuration into a link that only NullVPN can open, so the address and keys inside are not readable. Open <span class="ui">Settings → Lock a configuration</span>, choose the servers, and pick how the link is protected:</p>
+    <ul>
+      <li><strong>Only in NullVPN:</strong> any copy of the app can open it.</li>
+      <li><strong>Only on specific devices:</strong> paste the Device IDs of the people who should be able to use it. Each person finds theirs under <span class="ui">Settings → Device ID</span>.</li>
+      <li><strong>Ask for a password:</strong> the link opens only after the password is entered.</li>
+    </ul>
+    <p>You can also set a start and an expiry date, so a link only works inside that window. Locked links are made inside the app and are added like any other link, from the clipboard or a QR code.</p>
+
+    <h2 id="tools">Tools</h2>
+    <p><span class="ui">Settings → Tools</span> collects a few checks that save a trip to a browser.</p>
+    <ul>
+      <li><strong>Speed test:</strong> measures download, upload and latency using Speedtest.net. While you are connected it runs through the VPN, so it tells you the speed of the tunnel itself.</li>
+      <li><strong>IP &amp; DNS check:</strong> records your address before you connect and compares it afterwards, and tests whether your DNS queries or IPv6 traffic escape the tunnel.</li>
+      <li><strong>Network diagnostics:</strong> walks through the connection step by step and tells you which one fails.</li>
+    </ul>
+
+    <h2 id="hotspot">Sharing over hotspot</h2>
+    <p>On Windows and Linux, <span class="ui">Settings → Tools → Share VPN (hotspot)</span> lets phones and other devices on your hotspot use your VPN. It works in TUN mode only, and the kill switch keeps their traffic from leaving unprotected if the tunnel drops. Android can do the same on a rooted phone. It is not available on iPhone or Mac.</p>
+
+    <h2 id="provider">The Provider tab</h2>
+    <p>If your provider uses a supported panel, NullVPN can show your account (traffic left, expiry) and keep their server list up to date without displaying the individual configurations. The tab is off by default; turn on <span class="ui">Show the Provider tab</span> in Settings to use it.</p>
+
     <h2 id="troubleshooting">Troubleshooting</h2>
     <details>
       <summary>Connected, but nothing loads</summary>
@@ -243,7 +272,7 @@ sudo ./install.sh       # or install it, with menu entries and `nullvpn` on PATH
     </details>
     <details>
       <summary>What does NullVPN connect to on its own?</summary>
-      <p>Only the servers and subscriptions you add, <code>ip-api.com</code> to show your IP and country, and a public relay list when you pick an exit location in Aether.</p>
+      <p>Only the servers and subscriptions you add. Beyond those: a few IP lookup services to show your address and country (and for the leak checks), Speedtest.net when you run the speed test, GitHub to look for new versions and routing data, and a public relay list when you pick an exit location in Aether.</p>
     </details>
   </article>
 </main>
